@@ -20,7 +20,7 @@ after_success:
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   #Take those images and push them to docker hub
-  - brungo1995/multi-client
-  - brungo1995/multi-nginx
-  - brungo1995/multi-server
-  - brungo1995/multi-worker
+  - docker push brungo1995/multi-client
+  - docker push brungo1995/multi-nginx
+  - docker push brungo1995/multi-server
+  - docker push brungo1995/multi-worker
