@@ -1,0 +1,26 @@
+sudo: required
+language: generic
+services:
+  - docker
+
+#  build the test image
+before_install:
+  - docker build -t brungo1995/react-test -f ./client/Dockerfile.dev ./client
+
+#if you had more tests you should put them here ex: api tests worker tests
+script:
+  - docker run -e CI=true brungo1995/react-test npm test
+  # goes to each folder and builds the docker image based on the Dockerfile for production
+after_success:
+  - docker build -t brungo1995/multi-client ./client
+  - docker build -t brungo1995/multi-nginx ./nginx
+  - docker build -t brungo1995/multi-server ./server
+  - docker build -t brungo1995/multi-worker ./worker
+
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  #Take those images and push them to docker hub
+  - brungo1995/multi-client
+  - brungo1995/multi-nginx
+  - brungo1995/multi-server
+  - brungo1995/multi-worker
